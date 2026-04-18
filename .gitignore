@@ -206,7 +206,3 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Ficheros con claves
-api_keys.env
-.env
-config/api_keys.env
