@@ -273,4 +273,3 @@ def bubble_plot(df, col_x, col_y, col_size, scale = 1000):
     plt.title(f'Burbujas de {col_x} vs {col_y} con Tamaño basado en {col_size}')
     plt.show()
 
-
