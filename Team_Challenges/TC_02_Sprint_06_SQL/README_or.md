@@ -50,42 +50,60 @@ El proyecto abarca desde el diseño del modelo de datos hasta la validación med
 Se puede consultar el modelo de datos en el directorio docs de la parte2, tanto su descripción como su visualización generada con [dbdiagram.io](https://dbdiagram.io/home)
 
 
-## ☁️ Configuración de Google BigQuery
 
 
 ## ⚙️ Setup
 
 ### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/[usuario]/tc-sql.git
-cd tc-sql
+git clone <https://github.com/mrguezrodriguez/whiteberry>
+cd whiteberry
 ```
 
-### 2. Crear el entorno virtual
-```bash
+### 2. Usuarios de Windows — habilitar scripts de PowerShell
+> Solo necesitas hacerlo **una vez** en tu máquina.
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+### 3. Crear y activar el entorno virtual
+
+**Windows (PowerShell):**
+```powershell
 python -m venv venv
-source venv/bin/activate        # Mac/Linux
-# venv\Scripts\activate         # Windows
+venv\Scripts\activate
 ```
 
-### 3. Instalar dependencias
+### 4. Instalar dependencias
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Mantener las dependencias actualizadas
+
+Cada vez que instales un paquete nuevo, ejecuta:
+
+```bash
+pip freeze > requirements.txt
+```
+
+Y luego haz commit del archivo actualizado. Así tus compañeros podrán sincronizar las dependencias con:
+
 ```bash
 pip install -r parte2/requirements.txt
 ```
 
-### 4. Configurar credenciales
+### 6. Configurar credenciales
 ```bash
 cp .env.example .env
 # Editar .env con vuestros valores reales
 ```
 
-El fichero `.env` **nunca se sube al repositorio**.
 
-### 5. Credenciales de Google Cloud
+## ☁️ Configuración de Google BigQuery
 
-Dos opciones:
-- **Service Account**: descargad el JSON desde IAM → Service Accounts y apuntad la ruta en `GOOGLE_APPLICATION_CREDENTIALS`
-- **Application Default Credentials**: `gcloud auth application-default login`
+- **Service Account**: se ha descargado el JSON desde IAM → Service Accounts y se ha apuntado a la ruta en `GOOGLE_APPLICATION_CREDENTIALS`
 
 ---
 
