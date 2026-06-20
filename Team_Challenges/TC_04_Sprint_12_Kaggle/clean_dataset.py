@@ -85,14 +85,31 @@ def parse_screen_resolution(df):
 # ============================
 def clean_dataset(df):
     df = df.copy()
-
+    # Aplicar funciones de limpieza
     df = clean_ram(df)
     df = clean_weight(df)
     df = parse_memory(df)
     df = parse_cpu(df)
     df = parse_gpu(df)
     df = parse_screen_resolution(df)
+    
+    # Rellenar NaN en categóricas y convertir a string
+    df["Cpu_brand"] = df["Cpu_brand"].fillna("Unknown").astype(str)
+    df["Cpu_model"] = df["Cpu_model"].fillna("Unknown").astype(str)
+    df["Gpu_brand"] = df["Gpu_brand"].fillna("Unknown").astype(str)
+    
+    # Columnas finales que queremos conservar
+    cols_to_keep = [
+        "Ram", "Weight",
+        "SSD", "HDD", "Flash", "Hybrid",
+        "Resolution_X", "Resolution_Y",
+        "Touchscreen",
+        "Cpu_brand", "Cpu_model", "Gpu_brand"
+    ]
 
-    df = df.drop(columns=["Memory", "Cpu", "Gpu", "ScreenResolution"])
+    # Si el target está presente, lo conservamos
+    if "Price_in_euros" in df.columns:
+        cols_to_keep.append("Price_in_euros")
 
-    return df
+    # Devolver solo las columnas finales
+    return df[cols_to_keep]
