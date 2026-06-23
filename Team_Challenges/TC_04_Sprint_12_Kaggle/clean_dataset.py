@@ -94,9 +94,13 @@ def clean_dataset(df):
     df = parse_screen_resolution(df)
     
     # Rellenar NaN en categóricas y convertir a string
-    df["Cpu_brand"] = df["Cpu_brand"].fillna("Unknown").astype(str)
-    df["Cpu_model"] = df["Cpu_model"].fillna("Unknown").astype(str)
-    df["Gpu_brand"] = df["Gpu_brand"].fillna("Unknown").astype(str)
+    # Columnas categóricas finales
+    categorical_cols = [col for col in df.columns if df[col].dtype == "object"]
+
+    
+    # Rellenar NaN y forzar a string
+    for col in categorical_cols:
+        df[col] = df[col].fillna("Unknown").astype(str)
     
     # Columnas finales que queremos conservar
     cols_to_keep = [
