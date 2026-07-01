@@ -467,3 +467,64 @@ def bubble_plot(
     plt.title(f"Burbujas de {col_x} vs {col_y} con Tamaño basado en {col_size}")
     plt.tight_layout()
     plt.show()
+    
+    
+def plot_categorical_relationship_fin(df, cat_col1, cat_col2, relative_freq=False, show_values=False, size_group = 5):
+    # Prepara los datos
+    count_data = df.groupby([cat_col1, cat_col2]).size().reset_index(name='count')
+    total_counts = df[cat_col1].value_counts()
+    
+    # Convierte a frecuencias relativas si se solicita
+    if relative_freq:
+        count_data['count'] = count_data.apply(lambda x: x['count'] / total_counts[x[cat_col1]], axis=1)
+
+    # Si hay más de size_group categorías en cat_col1, las divide en grupos de size_group
+    unique_categories = df[cat_col1].unique()
+    if len(unique_categories) > size_group:
+        num_plots = int(np.ceil(len(unique_categories) / size_group))
+
+        for i in range(num_plots):
+            # Selecciona un subconjunto de categorías para cada gráfico
+            categories_subset = unique_categories[i * size_group:(i + 1) * size_group]
+            data_subset = count_data[count_data[cat_col1].isin(categories_subset)]
+
+            # Crea el gráfico
+            plt.figure(figsize=(10, 6))
+            ax = sns.barplot(x=cat_col1, y='count', hue=cat_col2, data=data_subset, order=categories_subset)
+
+            # Añade títulos y etiquetas
+            plt.title(f'Relación entre {cat_col1} y {cat_col2} - Grupo {i + 1}')
+            plt.xlabel(cat_col1)
+            plt.ylabel('Frecuencia' if relative_freq else 'Conteo')
+            plt.xticks(rotation=45)
+
+            # Mostrar valores en el gráfico
+            if show_values:
+                for p in ax.patches:
+                    ax.annotate(f'{p.get_height():.2f}', (p.get_x() + p.get_width() / 2., p.get_height()),
+                                ha='center', va='center', fontsize=10, color='black', xytext=(0, size_group),
+                                textcoords='offset points')
+
+            # Muestra el gráfico
+            plt.show()
+    else:
+        # Crea el gráfico para menos de size_group categorías
+        plt.figure(figsize=(10, 6))
+        ax = sns.barplot(x=cat_col1, y='count', hue=cat_col2, data=count_data)
+
+        # Añade títulos y etiquetas
+        plt.title(f'Relación entre {cat_col1} y {cat_col2}')
+        plt.xlabel(cat_col1)
+        plt.ylabel('Frecuencia' if relative_freq else 'Conteo')
+        plt.xticks(rotation=45)
+
+        # Mostrar valores en el gráfico
+        if show_values:
+            for p in ax.patches:
+                ax.annotate(f'{p.get_height():.2f}', (p.get_x() + p.get_width() / 2., p.get_height()),
+                            ha='center', va='center', fontsize=10, color='black', xytext=(0, size_group),
+                            textcoords='offset points')
+
+        # Muestra el gráfico
+        plt.show()
+
